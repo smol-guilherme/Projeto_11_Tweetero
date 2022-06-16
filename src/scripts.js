@@ -6,47 +6,34 @@ export function handleSignUp(obj) {
         if(item.username === obj.username) {
             return true;
         }
-        return false;
     })
     if(isNameTaken) {
-        return console.error('Usuário já existe');
+        return 'Usuário já existe';
     }
     users.push(obj)
-    console.log(users)
-    return console.log('OK');
+    return 'OK';
 }
 
 export function handleTweet(obj) {
-    tweets.push(obj)
-    console.log(tweets)
-    return console.log('OK');
+    tweets.unshift(obj)
+    return 'OK';
 }
 
 export function handleDisplayTweet() {
-    const tweetData = []
-    let i = 0
-    let tweet;
+    const data = [];
+    let i = 0;
+    let postData;
     let avatar;
-    console.log(tweets)
-    // while (i < 10 || i < tweets.length) {
-    //     tweet = tweets[i];
-    //     console.log(tweet)
-    //     avatar = users.find((user) => {
-    //         if(user.username === tweet.username) {
-    //             return user
-    //         }
-    //     });
-    //     tweetData.push({ ...tweet, avatar: avatar.avatar })
-    //     i++;
-    // }
-    // return tweetData;
+    const MAXLENGTH = tweets.length > 10 ? 10 : tweets.length;
+    while (i < MAXLENGTH) {
+        postData = tweets[i];
+        avatar = getAvatar(postData.username)
+        data.unshift({ ...postData, avatar: avatar.avatar })
+        i++;
+    }
+    return data;
 }
 
 function getAvatar(name) {
-    const avatar = users.find((user) => {
-        if(user.username === name) {
-            return user.avatar
-        }
-    })
-    return avatar;
+    return users.find((user) => user.username === name);
 }
