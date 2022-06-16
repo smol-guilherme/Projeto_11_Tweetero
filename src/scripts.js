@@ -1,7 +1,7 @@
 import users from "./users.js";
 import tweets from "./tweets.js"
 
-export function handleSignUp(obj) {
+function handleSignUp(obj) {
     if(obj.username === '' || obj.avatar === '') {
         return 'empty';
     }
@@ -17,7 +17,7 @@ export function handleSignUp(obj) {
     return 'OK';
 }
 
-export function handleTweet(obj) {
+function handleTweet(obj) {
     if(obj.username === '' || obj.tweet === '') {
         return 'empty';
     }
@@ -25,7 +25,7 @@ export function handleTweet(obj) {
     return 'OK';
 }
 
-export function handleDisplayTweet() {
+function handleDisplayTweet() {
     const data = [];
     let i = 0;
     let postData;
@@ -43,3 +43,25 @@ export function handleDisplayTweet() {
 function getAvatar(name) {
     return users.find((user) => user.username === name);
 }
+
+function handleShowAllTweets(username) {
+    const avatar = getAvatar(username).avatar;
+    console.log(avatar)
+    const userTweets = tweets.filter((tweet) => {
+        if (tweet.username === username) {
+            tweet.avatar = avatar;
+            return tweet
+        }
+        return null
+    })
+    console.log(userTweets);
+    return userTweets;
+}
+
+const scripts = {
+    handleDisplayTweet,
+    handleSignUp,
+    handleTweet,
+    handleShowAllTweets
+};
+export default scripts;

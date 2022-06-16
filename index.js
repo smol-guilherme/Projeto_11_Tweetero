@@ -1,17 +1,25 @@
 import express from "express";
 import cors from "cors";
-import { handleSignUp, handleTweet, handleDisplayTweet } from "./src/scripts.js";
+import scripts from "./src/scripts.js";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 app.get('/tweets', (req, res) => {
+    const { handleDisplayTweet } = scripts
     res.send(handleDisplayTweet())
 });
 
+app.get('/tweets/:username', (req, res) => {
+    const user = req.params.username
+    const { handleShowAllTweets } = scripts
+    res.send(handleShowAllTweets(user))
+})
+
 app.post('/sign-up', async(req, res) => {
     const newUser = req.body
+    const { handleSignUp } = scripts
     switch(handleSignUp(newUser)) {
         case 'OK':
             return res.status(201).send('OK');
@@ -26,6 +34,7 @@ app.post('/sign-up', async(req, res) => {
 
 app.post('/tweets', async(req, res) => {
     const newTweet = req.body;
+    const { handleTweet } = scripts
     switch(handleTweet(newTweet)) {
         case 'OK':
             return res.status(201).send('OK');
