@@ -6,15 +6,19 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/tweets', (req, res) => {
-    const { handleDisplayTweet } = scripts
-    res.send(handleDisplayTweet())
+app.get(`/tweets`, (req, res) => {
+    const { handleDisplayTweets, handlePage } = scripts
+    if(handlePage(req.query.page)) {
+        return res.send(handleDisplayTweets(req.query.page))
+    }
+    return res.status(400).send('Informe uma página válida!')
 });
 
-app.get('/tweets/:username', (req, res) => {
+app.get(`/tweets/:username`, (req, res) => {
     const user = req.params.username
+    console.log(req.query.page)
     const { handleShowAllTweets } = scripts
-    res.send(handleShowAllTweets(user))
+    return res.send(handleShowAllTweets(user))
 })
 
 app.post('/sign-up', async(req, res) => {
@@ -34,7 +38,9 @@ app.post('/sign-up', async(req, res) => {
 
 app.post('/tweets', async(req, res) => {
     const newTweet = req.body;
+    newTweet.username = req.header('user')
     const { handleTweet } = scripts
+    console.log(newTweet)
     switch(handleTweet(newTweet)) {
         case 'OK':
             return res.status(201).send('OK');

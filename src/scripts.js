@@ -25,16 +25,18 @@ function handleTweet(obj) {
     return 'OK';
 }
 
-function handleDisplayTweet() {
+function handleDisplayTweets(pageNum) {
     const data = [];
     let i = 0;
+    let startPos = 10*(pageNum - 1);
     let postData;
     let avatar;
-    const MAXLENGTH = tweets.length > 10 ? 10 : tweets.length;
+    const MAXLENGTH = (tweets.length - startPos) > 10 ? 10 : (tweets.length - startPos);
     while (i < MAXLENGTH) {
-        postData = tweets[i];
-        avatar = getAvatar(postData.username)
-        data.unshift({ ...postData, avatar: avatar.avatar })
+        postData = tweets[startPos+i];
+        avatar = getAvatar(postData.username);
+        data.push({ ...postData, avatar: avatar.avatar });
+        console.log(startPos, data);
         i++;
     }
     return data;
@@ -58,10 +60,18 @@ function handleShowAllTweets(username) {
     return userTweets;
 }
 
+function handlePage(pageNum) {
+    if(pageNum > 0) {
+        return true
+    }
+    return false
+}
+
 const scripts = {
-    handleDisplayTweet,
+    handleDisplayTweets,
     handleSignUp,
     handleTweet,
-    handleShowAllTweets
+    handleShowAllTweets,
+    handlePage
 };
 export default scripts;
