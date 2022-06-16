@@ -12,21 +12,27 @@ app.get('/tweets', (req, res) => {
 
 app.post('/sign-up', async(req, res) => {
     const newUser = req.body
-    try {
-        handleSignUp(newUser)
-        res.send('OK');
-    } catch {
-        res.send('Error')
+    switch(handleSignUp(newUser)) {
+        case 'OK':
+            return res.status(201).send('OK');
+        case 'duplicate':
+            return res.status(400).send('Usuário já existe');
+        case 'empty':
+            return res.status(400).send('Todos os campos são obrigatórios');
+        default:
+            return res.status(400).send('Erro desconhecido');
     }
 })
 
 app.post('/tweets', async(req, res) => {
     const newTweet = req.body;
-    try {
-        handleTweet(newTweet)
-        res.send('OK')
-    } catch {
-        res.send('Error')
+    switch(handleTweet(newTweet)) {
+        case 'OK':
+            return res.status(201).send('OK');
+        case 'empty':
+            return res.status(400).send('Todos os campos são obrigatórios');
+        default:
+            return res.status(400).send('Erro desconhecido');
     }
 })
 

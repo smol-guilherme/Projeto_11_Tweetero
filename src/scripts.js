@@ -2,19 +2,25 @@ import users from "./users.js";
 import tweets from "./tweets.js"
 
 export function handleSignUp(obj) {
+    if(obj.username === '' || obj.avatar === '') {
+        return 'empty';
+    }
     const isNameTaken = users.find((item) => {
         if(item.username === obj.username) {
             return true;
         }
     })
     if(isNameTaken) {
-        return 'Usuário já existe';
+        return 'duplicate';
     }
     users.push(obj)
     return 'OK';
 }
 
 export function handleTweet(obj) {
+    if(obj.username === '' || obj.tweet === '') {
+        return 'empty';
+    }
     tweets.unshift(obj)
     return 'OK';
 }
